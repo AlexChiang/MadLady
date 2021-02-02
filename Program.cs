@@ -95,7 +95,7 @@ namespace MadLady
         }
     }
 
-    public class RomanToInt()
+    public class RomanToInt
     {
         /*
         Symbol       Value
@@ -107,6 +107,25 @@ namespace MadLady
         D             500
         M             1000
         */
+
+        private int Convert(string input)
+        {
+            int output = 0;
+
+            return output;
+        }
+
+        public void Run()
+        {
+            string roman = "XXVIII";
+            int integer;
+            
+            integer = Convert(roman);
+            Console.Write(String.Format("{0}: {1}", roman, integer));
+            Console.Write("\n");
+
+
+        }
 
     }
 
