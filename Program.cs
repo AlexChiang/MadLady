@@ -198,6 +198,26 @@ namespace MadLady
             return prefix;
         }
 
+        private string FindVertical(string[] input)
+        {
+            if(null == input || 0 == input.Length) return String.Empty;
+            
+            char c;
+            for(int i=0; i<input[0].Length; i++)
+            {
+                c = input[0][i];
+                for(int j=1; j<input.Length; j++)
+                {
+                    if(c != input[j][i] || i == input[j].Length)
+                    {
+                        return input[0].Substring(0, i);
+                    }
+                }
+            }
+
+            return String.Empty;
+        }
+
         public void Run()
         {
             string[] list1 = new string[] {"flower", "flow", "flight"};
@@ -210,9 +230,60 @@ namespace MadLady
             Console.Write(String.Format("List 1: {0}\nList 2: {1}", commonPrefix1, commonPrefix2));
             Console.Write("\n");
 
+            commonPrefix1 = FindVertical(list1);
+            commonPrefix2 = FindVertical(list2);
+            Console.Write(String.Format("List 1: {0}\nList 2: {1}", commonPrefix1, commonPrefix2));
+            Console.Write("\n");
+
 
         }
     }
+
+    public class ValidParentheses
+    {
+
+        private bool Validate(string input)
+        {
+            Dictionary<char, char> p = new Dictionary<char, char>();
+            p.Add(')', '(');
+            p.Add(']', '[');
+            p.Add('}', '{');
+
+            char c;
+
+            Stack<char> s = new Stack<char>();
+            for(int i=0; i<input.Length; i++)
+            {
+                c = input[i];
+                if(p.ContainsKey(c))
+                {
+                    char c1 = s.Pop();
+                    if(p[c] != c1) return false;
+                }
+                else
+                {
+                    s.Push(c);
+                }
+            }
+
+            if(0 < s.Count) return false;
+
+            return true;
+        }
+
+        public void Run()
+        {
+            string str1 = "()[{}]";
+            string str2 = "([)]";
+            
+            Console.Write(String.Format("{0} is {1}valid", str1, Validate(str1)? String.Empty : "not "));
+            Console.Write("\n");
+
+            Console.Write(String.Format("{0} is {1}valid", str2, Validate(str2)? String.Empty : "not "));
+            Console.Write("\n");
+        }
+    }
+
 
     class Program
     {
@@ -236,6 +307,9 @@ namespace MadLady
 
             LongestCommonPrefix lcp = new LongestCommonPrefix();
             lcp.Run();
+
+            ValidParentheses vp = new ValidParentheses();
+            vp.Run();
 
         }
     }
