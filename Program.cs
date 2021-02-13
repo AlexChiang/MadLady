@@ -106,12 +106,51 @@ namespace MadLady
         C             100
         D             500
         M             1000
+
+        IV  4
+        IX  9
+        XL  40
+        XC  90
+        CD  400
+        CM  900
+
         */
 
+        private int LookUp(char c)
+        {
+            if(c == 'I') return 1;
+            if(c == 'V') return 5;
+            if(c == 'X') return 10;
+            if(c == 'L') return 50;
+            if(c == 'C') return 100;
+            if(c == 'D') return 500;
+            if(c == 'M') return 1000;
+
+            return -1;
+        }
+        
         private int Convert(string input)
         {
             int output = 0;
+            int valCur = 0;
+            int valNext = 0;
 
+            for(int i=0; i<input.Length; i++)
+            {
+                valCur = LookUp(input[i]);
+                valNext = (i < input.Length-1) ? LookUp(input[i+1]) : 0;
+
+                if (valCur >= valNext)
+                {
+                    output += valCur;
+                }
+                else
+                {
+                    output += (valNext - valCur);
+                    i++;
+                }
+            }
+            
             return output;
         }
 
@@ -124,9 +163,55 @@ namespace MadLady
             Console.Write(String.Format("{0}: {1}", roman, integer));
             Console.Write("\n");
 
+            roman = "LVIII";
+            integer = Convert(roman);
+            Console.Write(String.Format("{0}: {1}", roman, integer));
+            Console.Write("\n");
+
+            roman = "MCMXCIV";
+            integer = Convert(roman);
+            Console.Write(String.Format("{0}: {1}", roman, integer));
+            Console.Write("\n");
 
         }
 
+    }
+
+    public class LongestCommonPrefix
+    {
+        private string FindHorizonal(string[] input)
+        {
+            string prefix = String.Empty;
+            if (null == input || 0 == input.Length) return prefix;
+
+            prefix = input[0];
+            for(int i=1; i<input.Length; i++)
+            {
+                while(input[i].IndexOf(prefix) != 0)
+                {
+                    prefix = prefix.Substring(0, prefix.Length -1);
+                }
+
+                if(String.IsNullOrEmpty(prefix)) return String.Empty;
+            }
+
+            return prefix;
+        }
+
+        public void Run()
+        {
+            string[] list1 = new string[] {"flower", "flow", "flight"};
+            string[] list2 = new string[] {"dog", "racecar", "car"};
+            string commonPrefix1 = String.Empty;
+            string commonPrefix2 = String.Empty;
+
+            commonPrefix1 = FindHorizonal(list1);
+            commonPrefix2 = FindHorizonal(list2);
+            Console.Write(String.Format("List 1: {0}\nList 2: {1}", commonPrefix1, commonPrefix2));
+            Console.Write("\n");
+
+
+        }
     }
 
     class Program
@@ -144,6 +229,13 @@ namespace MadLady
 
             Palindrome p = new Palindrome();
             p.Run();
+            Console.Write("\n===========\n");
+
+            RomanToInt rti = new RomanToInt();
+            rti.Run();
+
+            LongestCommonPrefix lcp = new LongestCommonPrefix();
+            lcp.Run();
 
         }
     }
