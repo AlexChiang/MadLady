@@ -284,6 +284,10 @@ namespace MadLady
         }
     }
 
+public class MergeSortedArray
+{
+    
+}
 
     class Program
     {
