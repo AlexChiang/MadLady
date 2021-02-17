@@ -286,7 +286,47 @@ namespace MadLady
 
 public class MergeSortedArray
 {
-    
+
+    private void Merge(ref int[] x, ref int[] y)
+    {
+        int c;
+        int y0;
+
+        for(int i=0; i<x.Length; i++)
+        {
+            if(y[0] < x[i])
+            {
+                //Swap
+                c = x[i];
+                x[i] = y[0];
+                y[0] = c;
+
+                //re-sort y
+                y0 = y[0];
+                int j;
+
+                for(j=1; j<y.Length && y[j] < y0; j++)
+                {
+                     y[j-1] = y[j];
+                }
+                
+                y[j-1] = y0;
+            }
+        }
+
+    }
+
+    public void Run()
+    {
+        int[] x = new int[] {1, 4, 7, 8, 10};
+        int[] y = new int[] {2, 3, 9};
+
+        Merge(ref x, ref y);
+
+        Console.Write("X: {0}\n",string.Join(", ", x));
+        Console.Write("Y: {0}\n",string.Join(", ", y));
+    }
+
 }
 
     class Program
@@ -314,6 +354,9 @@ public class MergeSortedArray
 
             ValidParentheses vp = new ValidParentheses();
             vp.Run();
+
+            MergeSortedArray msa = new MergeSortedArray();
+            msa.Run();
 
         }
     }
