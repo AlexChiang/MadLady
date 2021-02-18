@@ -329,6 +329,40 @@ public class MergeSortedArray
 
 }
 
+public class RemoveDupsInArray
+{
+
+    private int Dedupe(ref int[] input)
+    {        
+        if(0 == input.Length) return 0;
+        
+        int start = 0;
+        int end = 1;
+
+        while(end < input.Length)
+        {
+            while(input[start] == input[end])
+            {
+                end++;
+            }
+            input[++start] = input[end++];
+        }
+
+        Array.Resize<int>(ref input, start+1);
+
+        return start+1;
+    }
+
+    public void Run()
+    {
+        int[] arr = new int[] {0,0,1,1,1,2,2,3,4,5,5,6,7};
+
+        int newCount = Dedupe(ref arr);
+        Console.Write("{0}: {1}\n", newCount, string.Join(", ", arr));
+    
+    }
+}
+
     class Program
     {
 
@@ -357,6 +391,9 @@ public class MergeSortedArray
 
             MergeSortedArray msa = new MergeSortedArray();
             msa.Run();
+
+            RemoveDupsInArray rdia = new RemoveDupsInArray();
+            rdia.Run();
 
         }
     }
