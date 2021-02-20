@@ -285,109 +285,113 @@ namespace MadLady
     }
 
     public class MergeSortedArray
-{
-
-    private void Merge(ref int[] x, ref int[] y)
     {
-        int c;
-        int y0;
 
-        for(int i=0; i<x.Length; i++)
+        private void Merge(ref int[] x, ref int[] y)
         {
-            if(y[0] < x[i])
+            int c;
+            int y0;
+
+            for(int i=0; i<x.Length; i++)
             {
-                //Swap
-                c = x[i];
-                x[i] = y[0];
-                y[0] = c;
-
-                //re-sort y
-                y0 = y[0];
-                int j;
-
-                for(j=1; j<y.Length && y[j] < y0; j++)
+                if(y[0] < x[i])
                 {
-                     y[j-1] = y[j];
+                    //Swap
+                    c = x[i];
+                    x[i] = y[0];
+                    y[0] = c;
+
+                    //re-sort y
+                    y0 = y[0];
+                    int j;
+
+                    for(j=1; j<y.Length && y[j] < y0; j++)
+                    {
+                        y[j-1] = y[j];
+                    }
+                    
+                    y[j-1] = y0;
                 }
-                
-                y[j-1] = y0;
             }
+
+        }
+
+        public void Run()
+        {
+            int[] x = new int[] {1, 4, 7, 8, 10};
+            int[] y = new int[] {2, 3, 9};
+
+            Merge(ref x, ref y);
+
+            Console.Write("X: {0}\n",string.Join(", ", x));
+            Console.Write("Y: {0}\n",string.Join(", ", y));
         }
 
     }
-
-    public void Run()
-    {
-        int[] x = new int[] {1, 4, 7, 8, 10};
-        int[] y = new int[] {2, 3, 9};
-
-        Merge(ref x, ref y);
-
-        Console.Write("X: {0}\n",string.Join(", ", x));
-        Console.Write("Y: {0}\n",string.Join(", ", y));
-    }
-
-}
 
     public class RemoveDupsInArray
-{
-
-    private int Dedupe(ref int[] input)
-    {        
-        if(0 == input.Length) return 0;
-        
-        int start = 0;
-        int end = 1;
-
-        while(end < input.Length)
-        {
-            while(input[start] == input[end])
-            {
-                end++;
-            }
-            input[++start] = input[end++];
-        }
-
-        Array.Resize<int>(ref input, start+1);
-
-        return start+1;
-    }
-    public void Run()
     {
-        int[] arr = new int[] {0,0,1,1,1,2,2,3,4,5,5,6,7};
 
-        int newCount = Dedupe(ref arr);
-        Console.Write("{0}: {1}\n", newCount, string.Join(", ", arr));
-    
+        private int Dedupe(ref int[] input)
+        {        
+            if(0 == input.Length) return 0;
+            
+            int start = 0;
+            int end = 1;
+
+            while(end < input.Length)
+            {
+                while(input[start] == input[end])
+                {
+                    end++;
+                }
+                input[++start] = input[end++];
+            }
+
+            Array.Resize<int>(ref input, start+1);
+
+            return start+1;
+        }
+        public void Run()
+        {
+            int[] arr = new int[] {0,0,1,1,1,2,2,3,4,5,5,6,7};
+
+            int newCount = Dedupe(ref arr);
+            Console.Write("{0}: {1}\n", newCount, string.Join(", ", arr));
+        
+        }
     }
-}
 
 
     public class RemoveElement
-{
-    private int Remove(ref int[] input, int element)
     {
-        int start = 0;
-        int end = 0;
-
-        while(end < input.Length)
+        private int Remove(ref int[] input, int val)
         {
-            
+            int start = 0;
+
+            for(int end = 0; end < input.Length; end++)
+            {
+                if(input[end] != val)
+                {
+                    input[start] = input[end];
+                    start++;
+                }
+
+            }
+
+            Array.Resize<int>(ref input, start);
+            return start;
         }
 
-
-        return start+1;
+        public void Run()
+        {
+            int[] arr = new int[] {2,1,2,2,3,0,4,2,3};
+            int element = 2;
+            
+            int newCount = Remove(ref arr, element);
+            Console.Write("{0}: {1}\n", newCount, string.Join(", ", arr));      
+        }
     }
-
-    public void Run()
-    {
-        int[] arr = new int[] {0,1,2,2,3,0,4,2};
-        int element = 2;
-        
-        int newCount = Remove(ref arr, element);
-        Console.Write("{0}: {1}\n", newCount, string.Join(", ", arr));      
-    }
-}
 
     class Program
     {
@@ -420,6 +424,9 @@ namespace MadLady
 
             RemoveDupsInArray rdia = new RemoveDupsInArray();
             rdia.Run();
+
+            RemoveElement re = new RemoveElement();
+            re.Run();
 
         }
     }
