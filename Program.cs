@@ -284,7 +284,7 @@ namespace MadLady
         }
     }
 
-public class MergeSortedArray
+    public class MergeSortedArray
 {
 
     private void Merge(ref int[] x, ref int[] y)
@@ -329,7 +329,7 @@ public class MergeSortedArray
 
 }
 
-public class RemoveDupsInArray
+    public class RemoveDupsInArray
 {
 
     private int Dedupe(ref int[] input)
@@ -352,7 +352,6 @@ public class RemoveDupsInArray
 
         return start+1;
     }
-
     public void Run()
     {
         int[] arr = new int[] {0,0,1,1,1,2,2,3,4,5,5,6,7};
@@ -360,6 +359,33 @@ public class RemoveDupsInArray
         int newCount = Dedupe(ref arr);
         Console.Write("{0}: {1}\n", newCount, string.Join(", ", arr));
     
+    }
+}
+
+
+    public class RemoveElement
+{
+    private int Remove(ref int[] input, int element)
+    {
+        int start = 0;
+        int end = 0;
+
+        while(end < input.Length)
+        {
+            
+        }
+
+
+        return start+1;
+    }
+
+    public void Run()
+    {
+        int[] arr = new int[] {0,1,2,2,3,0,4,2};
+        int element = 2;
+        
+        int newCount = Remove(ref arr, element);
+        Console.Write("{0}: {1}\n", newCount, string.Join(", ", arr));      
     }
 }
 
