@@ -3,8 +3,8 @@ using System.Collections.Generic;
 
 namespace MadLady
 {
-
-    public class TwoSums{
+    public class TwoSums : IMadLady
+    {
         private int[] Resolution(int[] input, int target)
         {
             Dictionary<int, int> dict = new Dictionary<int, int>();
@@ -26,11 +26,12 @@ namespace MadLady
         public void Run(){
             //int[] arr =; 
             int[] idx = Resolution(new int[] {2, 7, 11, 2}, 9);
-            Console.Write(String.Format("Answer: {0} and {1}", idx[0], idx[1]));
+            Console.Write(String.Format("Answer: {0} and {1}\n", idx[0], idx[1]));
         }
     }
 
-    public class ReverseInteger{
+    public class ReverseInteger : IMadLady
+    {
 
         private int Reverse(int input)
         {
@@ -62,7 +63,8 @@ namespace MadLady
         }
     }
 
-    public class Palindrome{
+    public class Palindrome : IMadLady
+    {
         private Boolean Check(int input){
 
             string inputStr = input.ToString();
@@ -94,7 +96,7 @@ namespace MadLady
         }
     }
 
-    public class RomanToInt
+    public class RomanToInt : IMadLady
     {
         /*
         Symbol       Value
@@ -173,7 +175,7 @@ namespace MadLady
 
     }
 
-    public class LongestCommonPrefix
+    public class LongestCommonPrefix : IMadLady
     {
         private string FindHorizonal(string[] input)
         {
@@ -228,7 +230,7 @@ namespace MadLady
         }
     }
 
-    public class ValidParentheses
+    public class ValidParentheses : IMadLady
     {
 
         private bool Validate(string input)
@@ -273,7 +275,7 @@ namespace MadLady
         }
     }
 
-    public class MergeSortedArray
+    public class MergeSortedArray : IMadLady
     {
 
         private void Merge(ref int[] x, ref int[] y)
@@ -318,7 +320,7 @@ namespace MadLady
 
     }
 
-    public class RemoveDupsInArray
+    public class RemoveDupsInArray : IMadLady
     {
 
         private int Dedupe(ref int[] input)
@@ -351,8 +353,7 @@ namespace MadLady
         }
     }
 
-
-    public class RemoveElement
+    public class RemoveElement : IMadLady
     {
         private int Remove(ref int[] input, int val)
         {
@@ -382,7 +383,7 @@ namespace MadLady
         }
     }
 
-    public class StrStr
+    public class StrStr : IMadLady
     {
         private int Match(string source, string target)
         {
@@ -414,41 +415,79 @@ namespace MadLady
         }
     }
 
+    public class SearchInsertPosition : IMadLady
+    {
+        private int Search(int[] input, int target)
+        {
+            for(int i=0; i< input.Length; i++)
+            {
+                if(input[i] > target)
+                {
+                    return (input[i] == target) ? (i-1) : i;
+                }
+            }
+            
+            return 0;
+        }
+
+        public void Run()
+        {
+            int[] arr = new int[] {1,3,5,6};
+            int target;
+            int idx;
+            
+            target = 5;
+            idx = Search(arr, target);
+            Console.Write("{0}: \"{1}\" | \"{2}\"\n", idx, String.Join<int>(",", arr), target);
+            
+            target = 1;
+            idx = Search(arr, target);
+            Console.Write("{0}: \"{1}\" | \"{2}\"\n", idx, String.Join<int>(",", arr), target);
+            
+            target = 4;
+            idx = Search(arr, target);
+            Console.Write("{0}: \"{1}\" | \"{2}\"\n", idx, String.Join<int>(",", arr), target);
+            
+            target = 0;
+            idx = Search(arr, target);
+            Console.Write("{0}: \"{1}\" | \"{2}\"\n", idx, String.Join<int>(",", arr), target);
+            
+        }
+    }
+
     class Program
     {
-
         static void Main(string[] args)
         {
-            TwoSums ts = new TwoSums();
-            ts.Run();
+            List<string> names = new List<string>
+            {
+                "TwoSums",
+                "ReverseInteger",
+                "Palindrome",
+                "RomanToInt",
+                "LongestCommonPrefix",
+                "ValidParentheses",
+                "MergeSortedArray",
+                "RemoveDupsInArray",
+                "RemoveElement",
+                "StrStr",
+                "SearchInsertPosition"
+            };
 
-            ReverseInteger ri = new ReverseInteger();
-            ri.Run();
+            foreach(string name in names)
+            {
+                Type t = Type.GetType("MadLady." + name);
+                IMadLady o = Activator.CreateInstance(t) as IMadLady;
 
-            Palindrome p = new Palindrome();
-            p.Run();
-
-            RomanToInt rti = new RomanToInt();
-            rti.Run();
-
-            LongestCommonPrefix lcp = new LongestCommonPrefix();
-            lcp.Run();
-
-            ValidParentheses vp = new ValidParentheses();
-            vp.Run();
-
-            MergeSortedArray msa = new MergeSortedArray();
-            msa.Run();
-
-            RemoveDupsInArray rdia = new RemoveDupsInArray();
-            rdia.Run();
-
-            RemoveElement re = new RemoveElement();
-            re.Run();
-
-            StrStr ss = new StrStr();
-            ss.Run();
+                Console.Write(string.Format("<<{0}>>\n", name));
+                o.Run();
+            }
 
         }
+    }
+
+    public interface IMadLady
+    {
+        void Run();
     }
 }
