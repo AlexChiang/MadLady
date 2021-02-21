@@ -58,7 +58,7 @@ namespace MadLady
 
         public void Run(){
             int num = Reverse(-12345);
-            Console.Write(num);
+            Console.Write(String.Format("{0}\n",num));
         }
     }
 
@@ -86,11 +86,10 @@ namespace MadLady
         {
             int input = 123454321;
 
-            Console.Write(String.Format("{0} is{1} a Palindrome", input, (Check(input) ? "" : " not" )));
-            Console.Write("\n");
+            Console.Write(String.Format("{0} is{1} a Palindrome.\n", input, (Check(input) ? "" : " not" )));
 
             input = 876543;
-            Console.Write(String.Format("{0} is{1} a Palindrome", input, (Check(input) ? "" : " not" )));
+            Console.Write(String.Format("{0} is{1} a Palindrome.\n", input, (Check(input) ? "" : " not" )));
 
         }
     }
@@ -160,18 +159,15 @@ namespace MadLady
             int integer;
             
             integer = Convert(roman);
-            Console.Write(String.Format("{0}: {1}", roman, integer));
-            Console.Write("\n");
+            Console.Write(String.Format("{0}: {1}\n", roman, integer));
 
             roman = "LVIII";
             integer = Convert(roman);
-            Console.Write(String.Format("{0}: {1}", roman, integer));
-            Console.Write("\n");
+            Console.Write(String.Format("{0}: {1}\n", roman, integer));
 
             roman = "MCMXCIV";
             integer = Convert(roman);
-            Console.Write(String.Format("{0}: {1}", roman, integer));
-            Console.Write("\n");
+            Console.Write(String.Format("{0}: {1}\n", roman, integer));
 
         }
 
@@ -227,14 +223,7 @@ namespace MadLady
 
             commonPrefix1 = FindHorizonal(list1);
             commonPrefix2 = FindHorizonal(list2);
-            Console.Write(String.Format("List 1: {0}\nList 2: {1}", commonPrefix1, commonPrefix2));
-            Console.Write("\n");
-
-            commonPrefix1 = FindVertical(list1);
-            commonPrefix2 = FindVertical(list2);
-            Console.Write(String.Format("List 1: {0}\nList 2: {1}", commonPrefix1, commonPrefix2));
-            Console.Write("\n");
-
+            Console.Write(String.Format("List 1: {0}\nList 2: {1}\n", commonPrefix1, commonPrefix2));
 
         }
     }
@@ -393,6 +382,38 @@ namespace MadLady
         }
     }
 
+    public class StrStr
+    {
+        private int Match(string source, string target)
+        {
+            if(source == null || target == null) return -1;
+            if(source.Length < target.Length) return -1;
+
+            for(int i=0; i <= (source.Length - target.Length); i++)
+            {
+                int j;
+                for(j=0; j < target.Length; j++)
+                {
+                    if(source[i+j] != target[j]) break;
+                }
+
+                if(j == target.Length) return i;
+            
+            }
+
+            return -1;
+        }
+
+        public void Run()
+        {
+            string source = "Delight";
+            string target = "light";
+
+            int idx = Match(source, target);
+            Console.Write("{0}: \"{1}\" | \"{2}\"\n", idx, source, target);
+        }
+    }
+
     class Program
     {
 
@@ -400,15 +421,12 @@ namespace MadLady
         {
             TwoSums ts = new TwoSums();
             ts.Run();
-            Console.Write("\n===========\n");
 
             ReverseInteger ri = new ReverseInteger();
             ri.Run();
-            Console.Write("\n===========\n");
 
             Palindrome p = new Palindrome();
             p.Run();
-            Console.Write("\n===========\n");
 
             RomanToInt rti = new RomanToInt();
             rti.Run();
@@ -427,6 +445,9 @@ namespace MadLady
 
             RemoveElement re = new RemoveElement();
             re.Run();
+
+            StrStr ss = new StrStr();
+            ss.Run();
 
         }
     }
