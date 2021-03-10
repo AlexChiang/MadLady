@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace MadLady
 {
@@ -24,8 +26,8 @@ namespace MadLady
         }
 
         public void Run(){
-            //int[] arr =; 
-            int[] idx = Resolution(new int[] {2, 7, 11, 2}, 9);
+            int[] arr = new int[] {2, 7, 11, 2};
+            int[] idx = Resolution(arr, 9);
             Console.Write(String.Format("Answer: {0} and {1}\n", idx[0], idx[1]));
         }
     }
@@ -455,6 +457,33 @@ namespace MadLady
         }
     }
 
+    public class SemaphoreDemo: IMadLady
+    {
+        public class Printer
+        {
+            public void Print(int docNumber)
+            {
+                Console.Write(String.Format("Printing document: {0}\n", docNumber));
+                Thread.Sleep(1000);
+            }
+        }
+        public void Run()
+        {
+            Printer printer = new Printer();
+            Semaphore s = new Semaphore(3, 3, "Printer App");
+            for(int i=0; i<20; ++i)
+            {
+                int j = i;
+                Task.Factory.StartNew(() =>
+                    {
+                        s.WaitOne();
+                        printer.Print(j);
+                        s.Release();
+                    }
+                );
+            }
+        }
+    }
     class Program
     {
         static void Main(string[] args)
@@ -471,7 +500,8 @@ namespace MadLady
                 "RemoveDupsInArray",
                 "RemoveElement",
                 "StrStr",
-                "SearchInsertPosition"
+                "SearchInsertPosition",
+                "SemaphoreDemo"
             };
 
             foreach(string name in names)
