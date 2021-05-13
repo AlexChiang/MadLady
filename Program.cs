@@ -484,6 +484,118 @@ namespace MadLady
             }
         }
     }
+
+    class ActionAndFunc : IMadLady
+    {
+        private void DoSomething(int i)
+        {
+            Console.Write(String.Format("Dosomething: {0}\n",i));
+        }
+
+        private double CalcSomething(int i)
+        {
+            return i/2;
+        }
+        public void Run()
+        {
+            Action<int> myAction = new Action<int>(DoSomething);
+            myAction (123);
+
+            Func<int, double> myFunc = new Func<int, double>(CalcSomething);
+            Console.Write("CalcSomething: " + myFunc(10) + "\n");
+        }
+    }
+
+    public class SemaphoreDemo2 : IMadLady
+    {
+        private int n;
+        Action PrintFoo = new Action(() => Console.Write("Foo"));
+        Action PrintBar = new Action(() => Console.Write("Bar"));
+        Semaphore s_foo;
+        Semaphore s_bar;
+        
+        private void Foo(Action printFoo)
+        {
+            s_foo.WaitOne();
+            for(int i=0; i<n; i++)
+            {
+                printFoo();
+            }
+            s_bar.Release();
+            
+        }
+
+        private void Bar(Action printBar)
+        {
+            s_bar.WaitOne();
+            for(int i=0; i<n; i++)
+            {
+                printBar();
+            }
+            s_foo.Release();
+        }
+
+        public void Run()
+        {
+            this.n = 10;
+            s_foo = new Semaphore(1, 1);
+            s_bar = new Semaphore(0, 1);
+            Task.Run(() => Foo(PrintFoo));
+            Task.Run(() => Bar(PrintBar));
+        }
+    }
+
+    public class ZeroEvenOdd : IMadLady
+    {
+        int number;
+        Semaphore sZero;
+        Semaphore sEven;
+        Semaphore sOdd;
+
+        Action<int> PrintNumber = new Action<int> ((x) => Console.Write(x));
+        
+        public void Run()
+        {
+            this.number = 10;
+            sZero = new Semaphore(1, 1);
+            sEven = new Semaphore(0, 1);
+            sOdd = new Semaphore(0, 1);
+
+        }
+        public void Zero(Action<int> printNumber)
+        {
+            for(int i=0; i< number; i++)
+            {
+                sZero.WaitOne();
+                printNumber(0);
+                if(i%2 == 0)
+                    sOdd.Release();
+                else
+                    sEven.Release();
+            }
+        }
+
+        public void Even(Action<int> printNumber)
+        {
+            for(int i=2; i< number; i=i+2)
+            {
+                sEven.WaitOne();
+                printNumber(i);
+                sZero.Release();
+            }
+        }
+
+        public void Odd(Action<int> printNumber)
+        {
+            for(int i=1; i< number; i=i+2)
+            {
+                sOdd.WaitOne();
+                printNumber(i);
+                sZero.Release();
+            }
+        }
+    }
+
     class Program
     {
         static void Main(string[] args)
@@ -501,7 +613,10 @@ namespace MadLady
                 "RemoveElement",
                 "StrStr",
                 "SearchInsertPosition",
-                "SemaphoreDemo"
+                "SemaphoreDemo",
+                "ActionAndFunc",
+                "SemaphoreDemo2",
+                "ZeroEvenOdd"
             };
 
             foreach(string name in names)
