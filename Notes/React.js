@@ -3,13 +3,28 @@ import ReactDOM from 'reactdom';
 import { render } from 'reactdom';
 import App from './App';
 
-//
+/////////////
+// HTML
 // <div id="container"></div>
-render(<App todo="" />, document.getElementById('container'));
+render(<App todo="" />,
+    document.getElementById('container'));
+
+/////////
+// Header.js
+import Reaact from "react";
+class Header extends React.Component{
+    render(){
+        return(<>
+                <h1>...</h1>
+            </>)
+    }
+}
+export default Header;
 
 /////////
 // App.js
 import React from "ract";
+import Header from "./Header";
 
 class App extends React.Component{
     constructor(props){
@@ -20,8 +35,9 @@ class App extends React.Component{
         }
     }
 
-    updateState(e){
-        this.setState({bar: e.target.value});
+    updateState(evt){
+        evt.preventDefault();
+        this.setState({bar: evt.target.value});
     }
 
     clearInput(){
@@ -38,17 +54,9 @@ class App extends React.Component{
                 value = {this.state.bar}
                 onChange = {this.updateState}
                 ref = "myInput" />
-            <button onClick= {this.clearInput}>CLR</button>
+            <button onClick= {this.clearInput}>CLEAR</button>
         </>)
     };
-}
-
-class Header extends React.Component{
-    render(){
-        return(<>
-            <h1>...</h1>
-        </>)
-    }
 }
 
 export default App;
