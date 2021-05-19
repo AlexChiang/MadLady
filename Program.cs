@@ -28,7 +28,7 @@ namespace MadLady
         public void Run(){
             int[] arr = new int[] {2, 7, 11, 2};
             int[] idx = Resolution(arr, 9);
-            Console.Write(String.Format("Answer: {0} and {1}\n", idx[0], idx[1]));
+            Console.WriteLine(String.Format("Answer: {0} and {1}", idx[0], idx[1]));
         }
     }
 

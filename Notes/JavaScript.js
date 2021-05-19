@@ -7,7 +7,7 @@ let arr,str,num,str2,start,end,i,o,obj,x,foo,bar;
 arr.toString(); // "a,b,c"
 arr.map((val, idx, arr) => { x => x*x }); //new arr
 arr.indexOf("foo")
-arr.reduce((total, val, idx, arr) => {total - val})
+arr.reduce((accumulator, val, idx, arr) => {accumulator + val})
 arr.reduceRight(); // same as above
 arr.fill(0)
 arr.filter(x => x>10)
