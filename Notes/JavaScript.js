@@ -71,14 +71,7 @@ p.then(
     function(value){ },
     function(error){ }
 )
-///////////
-// HTTP
-let req = new XMLHttpRequest()
-req.open('GET', 'http://foo.com/', true)
-req.onreadystatechange = function(){
-    if (this.readyState == 4 && this.status == 200){/* */}
-}
-req.send
+
 ///////////
 // THIS
 /*
@@ -121,4 +114,74 @@ foo = el.html
 el.hide() // [JS] .style.display = 'none'
 el.show() // [JS] .style.display = ''
 el.css("font-size", "35px") // [JS] .style.fontsize = "35px"
+///////////////////////////////////////////////////////////////
+//////////////
+// HTTP
+let req = new XMLHttpRequest();
+req.open('GET', 'http://foo.com/', true);
+req.onreadystatechange = function(){
+    if (this.readyState == 4 && this.status == 200){/* */}
+}
+req.send();
+////////////////
+// Long Polling
+async function subscribe() {
+    let response = await fetch("/subscribe");
+  
+    if (response.status == 502) {
+        // retry
+    } else if (response.status != 200) {
+      // reconnect in 1s
+      await new Promise(resolve => setTimeout(resolve, 1000));
+      await subscribe();
+    } else {
+      let message = await response.text();
+      showMessage(message);
+      // Call subscribe() again to get the next message
+      await subscribe();
+    }
+};
+  
+subscribe();
+//////////////////////
+// JQUERY LONG POLLING
+function showMessage(type, msg){
+    $("#msg").append(
+        "<div class='msg "+ type +"'>"+ msg +"</div>"
+    );
+};
+
+function subscribe(){
+    $.ajax({
+        type: "GET",
+        url: "/subscribe",
+        async: true,
+        cache: false,
+        timeout:30000,
+
+        success: function(data){
+            addmsg("new", data);
+            setTimeout(
+                subscribe,
+                1000
+            );
+        },
+        error: function(XMLHttpRequest, textStatus, err){
+            showMessage("error", textStatus + " (" + err + ")");
+            setTimeout(
+                subscribe,
+                30000);
+        }
+    });
+};
+
+$(document).ready(function(){
+    subscribe();
+});
+// SAME AS
+$(document).ready(subscribe);
+// OR - $(...) is $(document).ready(...)
+$(function(){
+    subscribe();
+});
 

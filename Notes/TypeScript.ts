@@ -28,7 +28,7 @@ let dir:Direction = "N";
 /////////////
 // INTERFACE
 // - interface has auto merging (type: use '&')
-// - interface is extensible (type: no)'
+// - interface is extensible (type: no)
 
 interface Server{
     ipv4: string;
@@ -79,6 +79,6 @@ const Hello = ({who}: Props) => (
     <p>Hello {who}</p>
 )
 //OR
-function Hello({who}: Props){
+function HelloFunc({who}: Props){
     return <p>Hello, {who}<p>);
 }

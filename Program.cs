@@ -12,7 +12,8 @@ namespace MadLady
             Dictionary<int, int> dict = new Dictionary<int, int>();
 
             foreach (int i in input){
-                if(dict.TryGetValue(i, out int comp) && comp == (target-i))
+                if(dict.TryGetValue(i, out int comp) &&
+                    comp == (target-i))
                 {
                     return new int[] {i, comp};
                 }
@@ -47,7 +48,7 @@ namespace MadLady
 
             while(input > 0)
             {
-                output = (output * 10) + input % 10;
+                output = (output * 10) + (input % 10);
                 input = input / 10;
             }
 
@@ -61,7 +62,7 @@ namespace MadLady
 
         public void Run(){
             int num = Reverse(-12345);
-            Console.Write(String.Format("{0}\n",num));
+            Console.WriteLine(String.Format("{0}",num));
         }
     }
 
@@ -70,7 +71,7 @@ namespace MadLady
         private Boolean Check(int input){
 
             string inputStr = input.ToString();
-            int start=0;
+            int start = 0;
             int end = inputStr.Length - 1;
 
             while (start < end)
@@ -189,7 +190,7 @@ namespace MadLady
             {
                 while(input[i].IndexOf(prefix) != 0)
                 {
-                    prefix = prefix.Substring(0, prefix.Length -1);
+                    prefix = prefix.Substring(0, prefix.Length - 1);
                 }
 
                 if(String.IsNullOrEmpty(prefix)) return String.Empty;
@@ -237,10 +238,10 @@ namespace MadLady
 
         private bool Validate(string input)
         {
-            Dictionary<char, char> p = new Dictionary<char, char>();
-            p.Add(')', '(');
-            p.Add(']', '[');
-            p.Add('}', '{');
+            Dictionary<char, char> dict = new Dictionary<char, char>();
+            dict.Add(')', '(');
+            dict.Add(']', '[');
+            dict.Add('}', '{');
 
             char c;
 
@@ -248,10 +249,10 @@ namespace MadLady
             for(int i=0; i<input.Length; i++)
             {
                 c = input[i];
-                if(p.ContainsKey(c))
+                if(dict.ContainsKey(c))
                 {
                     char c1 = s.Pop();
-                    if(p[c] != c1) return false;
+                    if(dict[c] != c1) return false;
                 }
                 else
                 {

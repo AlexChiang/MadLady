@@ -9,7 +9,7 @@ import App from './App';
 render(<App todo="" />,
     document.getElementById('container'));
 
-/////////
+/////////////
 // Header.js
 import Reaact from "react";
 class Header extends React.Component{
@@ -21,7 +21,7 @@ class Header extends React.Component{
 }
 export default Header;
 
-/////////
+///////////
 // App.js
 import React from "ract";
 import Header from "./Header";
