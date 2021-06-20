@@ -401,8 +401,7 @@ namespace MadLady
                     if(source[i+j] != target[j]) break;
                 }
 
-                if(j == target.Length) return i;
-            
+                if(j == target.Length) return i;          
             }
 
             return -1;
@@ -595,6 +594,179 @@ namespace MadLady
                 sZero.Release();
             }
         }
+        
+    }
+
+    public class ZipLinkedList : IMadLady {
+
+        public Node head;
+
+        public class Node
+        {
+            public int Value;
+            public Node Next;
+
+            public Node(int val)
+            {
+                Value = val;
+                Next = null; 
+            }
+        }
+
+        private Node Reverse(Node node)
+        {
+            Node prev = null;
+            Node next;
+            Node current = node;
+
+            while(current != null)
+            {
+                next = current.Next;
+                current.Next = prev;
+                prev = current;
+                current  = next;
+            }
+            
+            node = prev;
+            return node;
+        }
+
+        private void Zip(Node node)
+        {   
+            Node slowRunner = node; // Pointer to the node
+            Node fastRunner = slowRunner.Next; // pointer to "faster" runner;
+            
+            while(slowRunner != null && fastRunner != null)
+            {
+                slowRunner = slowRunner.Next;
+                if(fastRunner.Next != null)
+                {
+                    fastRunner = fastRunner.Next.Next;
+                }
+                else
+                {
+                    fastRunner = fastRunner.Next;
+                }
+            }
+
+            // Cut the LL into two, with middle node as breaking point
+            // 1 2 3 4 5 6 => (1 2 3) and (4 5 6)
+            Node nodeFistHalf = node;
+            Node nodeSecondHalf = slowRunner.Next;
+            slowRunner.Next = null;
+
+            //Print(nodeFistHalf);
+            //Print(nodeSecondHalf);
+
+            nodeSecondHalf = Reverse(nodeSecondHalf); // (4 5 6) => (6 5 4)
+
+            Node newHead = new Node(-1);
+            while(nodeFistHalf != null && nodeSecondHalf != null)
+            {
+                if(nodeFistHalf != null) // Adding (1) (2) (3) in each iteration
+                {
+                    newHead.Next = nodeFistHalf;
+                    newHead = newHead.Next;
+                    nodeFistHalf = nodeFistHalf.Next;
+                }
+
+                if(nodeSecondHalf != null) // Adding (6) (5) (4) in each iteration
+                {
+                    newHead.Next = nodeSecondHalf;
+                    newHead = newHead.Next;
+                    nodeSecondHalf = nodeSecondHalf.Next;
+                }
+            }
+
+            // Pick up the left over in the first half
+            if(nodeFistHalf != null)
+            {
+                newHead.Next = nodeFistHalf;
+                newHead = newHead.Next;
+                nodeFistHalf = nodeFistHalf.Next;
+            }
+
+            node = newHead.Next;
+        }
+
+        public void Print(Node head)
+        {
+            if(head == null) return;
+
+            while(head != null)
+            {
+                Console.Write(head.Value + " -> ");
+                head = head.Next;
+            }
+            Console.Write("nil");
+            Console.WriteLine();
+        }
+
+
+        public void Run() {
+
+            // Old: 1 2 3 4 5 6
+            // Final: 1 6 2 5 4 3
+            
+            ZipLinkedList LL = new ZipLinkedList();
+            Node node = new Node(1);
+            Node head = node;
+
+            int[] input = {2, 3, 4, 5, 6};
+
+            for(int i=0; i<input.Length; i++)
+            {
+                node.Next = new Node(input[i]);
+                node = node.Next;
+            }
+
+            Console.WriteLine("BEFORE");
+            LL.Print(head);
+
+            LL.Zip(head);
+
+            Console.WriteLine("AFTER");
+            LL.Print(head);
+
+        }
+    }
+
+    public class LookSay : IMadLady
+    {
+        public void Solution(string input, int lines)
+        {
+            if(input == null || lines == 0) return;
+
+            char c;
+            int index = 0;
+            int count = 0;
+            string say = String.Empty;
+            string all = String.Empty;
+
+            while(index < input.Length)
+            {
+                c = input[index];
+
+                while(index < input.Length && c == input[index])
+                {
+                    index++;
+                    count++;
+                }
+
+                say = count + c.ToString();
+                all += say;
+                count = 0;
+                Console.Write(say);
+            }
+
+            Console.WriteLine();
+            Solution(all, lines-1);
+        }
+
+        public void Run()
+        {
+            Solution("ab", 5);
+        }
     }
 
     class Program
@@ -617,16 +789,27 @@ namespace MadLady
                 "SemaphoreDemo",
                 "ActionAndFunc",
                 "SemaphoreDemo2",
-                "ZeroEvenOdd"
+                "ZeroEvenOdd",
+                "ZipLinkedList",
+                "LookSay"
             };
 
             foreach(string name in names)
             {
-                Type t = Type.GetType("MadLady." + name);
-                IMadLady o = Activator.CreateInstance(t) as IMadLady;
-
                 Console.Write(string.Format("<<{0}>>\n", name));
-                o.Run();
+                Type t = Type.GetType("MadLady." + name);
+
+                try{
+                    IMadLady o = Activator.CreateInstance(t) as IMadLady;
+  
+                    o.Run();
+                }
+                catch(ArgumentNullException e)
+                {
+                    Console.Write(e.ToString());
+                }
+
+
             }
 
         }

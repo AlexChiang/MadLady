@@ -1,4 +1,4 @@
-/* LIMIT OFFSET */
+/* LIMIT & OFFSET */
 SELECT(
     SELECT Salary
     FROM Employee
@@ -8,17 +8,18 @@ SELECT(
 ) AS SecondHighestSalary
 
 /* SELF JOIN */
-SELECT Name AS Employee
+SELECT FirstName + ' ' + LastName as FullName
 FROM Employee a,
      Employee b
 WHERE a.ManagerId = b.ManagerId AND
       a.Salary > b.Salary
 
 /* GRLUP BY | HAVING | COUNT() */
-SELECT Email
-FROM Person
-GROUP BY Email
-HAVING COUNT(Email) > 1
+SELECT COUNT(CustomerID), Country
+FROM Customers
+GROUP BY Country
+HAVING COUNT(CustomerID) > 5
+ORDER BY COUNT(CustomerID) DESC;
 
 /* DENSE_RANK() */
 SELECT Score,
