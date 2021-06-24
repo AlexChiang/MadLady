@@ -769,6 +769,65 @@ namespace MadLady
         }
     }
 
+    public class BinaryAdd : IMadLady
+    {
+        private string Add(string a, string b)
+        {
+            if(a == null || b == null ) return String.Empty;
+
+            string total = String.Empty;
+            int sum = 0;
+            int i = a.Length - 1;
+            int j = b.Length - 1;
+
+            while(i >= 0 || j >= 0)
+            {
+                if(i >= 0)
+                {
+                    sum += a[i] - '0';
+                }
+                else
+                {
+                    sum = 0;
+                }
+
+                if(j >= 0)
+                {
+                    sum += b[j] - '0';
+                }
+                else
+                {
+                    sum = 0;
+                }
+
+                //Sum: 0, 1, 2 or 3
+                total = (char) ((sum % 2) + '0') + total;
+                sum = sum / 2;
+
+                i--;
+                j--;
+            }
+
+            // Last carry
+            if(sum == 1)
+            {
+                total = sum + total;
+            }
+
+            return total;
+        }
+
+        public void Run()
+        {
+            string a = "101101";
+            string b = "111101";
+
+            string sum = Add(a, b);
+            Console.WriteLine(String.Format("{0} + {1} = {2}", a, b, sum));
+        }
+    }
+
+
     class Program
     {
         static void Main(string[] args)
@@ -791,7 +850,8 @@ namespace MadLady
                 "SemaphoreDemo2",
                 "ZeroEvenOdd",
                 "ZipLinkedList",
-                "LookSay"
+                "LookSay",
+                "BinaryAdd"
             };
 
             foreach(string name in names)
