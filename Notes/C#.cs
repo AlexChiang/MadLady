@@ -12,6 +12,8 @@ public void Bar()
     int[] arr1 = {1, 2, 3};
     int c, count, min, max;
 
+    Array.Copy(arr, 3, arr1, 0, 5);
+
     String str = String.Empty;
     c = str.IndexOf('x');
     str = str.Substring(0, 1);

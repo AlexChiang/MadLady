@@ -624,7 +624,7 @@ namespace MadLady
                 next = current.Next;
                 current.Next = prev;
                 prev = current;
-                current  = next;
+                current = next;
             }
             
             node = prev;
@@ -782,23 +782,11 @@ namespace MadLady
 
             while(i >= 0 || j >= 0)
             {
-                if(i >= 0)
-                {
-                    sum += a[i] - '0';
-                }
-                else
-                {
-                    sum = 0;
-                }
+                sum += (i >= 0) ?
+                    a[i] - '0' : 0;
 
-                if(j >= 0)
-                {
-                    sum += b[j] - '0';
-                }
-                else
-                {
-                    sum = 0;
-                }
+                sum += (j >= 0) ?
+                    b[j] - '0' : 0;
 
                 //Sum: 0, 1, 2 or 3
                 total = (char) ((sum % 2) + '0') + total;
@@ -809,9 +797,9 @@ namespace MadLady
             }
 
             // Last carry
-            if(sum == 1)
+            if (sum == 1)
             {
-                total = sum + total;
+                total += '1';
             }
 
             return total;
@@ -827,7 +815,320 @@ namespace MadLady
         }
     }
 
+    public class KSubArrarys : IMadLady
+    {
+        private int Find(int[] input, int limit)
+        {
+            if(input == null || input.Length == 0) return 0;
 
+            int start = 0;
+            int end = 0;
+            int count = 0;
+            int sum = input[0];
+
+            while(start < input.Length && end < input.Length)
+            {
+                if(sum < limit)
+                {
+                    end++;
+
+                    if(start < end)
+                    {
+                        count += end - start;
+                    }
+
+                    if(end < input.Length)
+                    {
+                        sum += input[end];
+                    }
+                }
+                else
+                {
+                    sum -= input[start];
+                    start++;
+                }
+
+                //Console.WriteLine(String.Format("start:{0} end:{1} count:{2}", start, end, count));
+            }
+
+            return count;
+        }
+
+        public void Run()
+        {
+            int[] input = {1, 11, 2, 3, 15};
+            int limit = 10;
+            int count = Find(input, limit);
+            Console.WriteLine("Input: " + "{ 1, 11, 2, 3, 15 }");
+            Console.WriteLine(String.Format("Total: {0} sub-arrays", count));
+
+            int[] input2 = {3, 5, 2, 7, 8, 9, 11, 2, 5, 8, 3};
+            int limit2 = 9;
+            int count2 = Find(input2, limit2);
+            Console.WriteLine("Input: " + "{3, 5, 2, 7, 8, 9, 11, 2, 5, 8, 3 }");
+            Console.WriteLine(String.Format("Total: {0} sub-arrays", count2));
+        }
+
+    }
+    public class InlineSortArrarys : IMadLady
+    {
+        public void Run()
+        {
+            int[] input = new int[] {-1, 1, 3, -2, 2, -3};
+
+            int left = 0;
+            int right = 0;
+            int temp = 0;
+
+            while(right < input.Length)
+            {
+                while(input[left] < 0) left++ ;
+                
+                right = left;
+
+                while(right < input.Length && input[right] > 0) right++;
+
+                if(right != input.Length)
+                {
+                    for(int i=right; i>left; i--)
+                    {
+                        temp = input[i-1];
+                        input[i-1] = input[i];
+                        input[i] = temp;
+                    }
+                }
+            }
+
+            Console.WriteLine(string.Join(",", input));
+        }
+    }
+
+    public class MaxSubArray : IMadLady
+    {
+        private void Find(int[] input)
+        {        
+            int left = 0;
+            int right = 0;
+            int total = 0;
+            int max = 0;
+            int maxLeft = 0;
+            int maxRight = 0;
+
+            while(right < input.Length)
+            {
+                total += input[right];
+                right++;
+
+                if (total > max)
+                {
+                    max = total;
+                    maxLeft = left;
+                    maxRight = right;
+                }
+
+                if(total < 0)
+                {
+                    left = right;
+                    total = 0;
+                }
+
+            }
+
+            right--;
+            int[] subArray = new int[right-left];
+            Array.Copy(input, left, subArray, 0, right-left);
+
+            Console.WriteLine("Max: " + max);
+            Console.WriteLine("{" + String.Join(", ", subArray) + "}");
+        }
+        public void Run()
+        {
+            int[] input = new int[] {-2, -3, 4, -1, -2, 1, 5, -3};
+            Find(input);
+        }
+    }
+
+    public class FindLongestConseqSubseq : IMadLady
+    {
+        private int Find(int[] input)
+        {
+            HashSet<int> dict = new HashSet<int>();
+            int maxCount = 0;
+            int count = 0;
+            int val;
+
+            for(int i=0; i<input.Length; i++)
+            {
+                dict.Add(input[i]);
+            }
+
+            for(int j=0; j<input.Length; j++)
+            {
+                val = input[j];
+
+                // Start of a seq?
+                if(!dict.Contains(val-1))
+                {
+                    while(dict.Contains(val))
+                    {
+                        val++;
+                        count++;
+                    }
+                }
+                
+                if(count > maxCount)
+                {
+                    maxCount = count;
+                }
+
+                count = 0;
+            }
+
+            return maxCount;
+        }
+
+        public void Run()
+        {
+            int[] input = new int[] {1, 9, 3, 10, 3, 4, 20, 2};
+            Console.WriteLine("{1, 9, 3, 10, 3, 4, 20, 2}");
+            Console.WriteLine("Count:" + Find(input));
+
+            int[] input2 = new int[] {36, 41, 56, 35, 44, 33, 34, 92, 43, 32, 42};
+            Console.WriteLine("{36, 41, 56, 35, 44, 33, 34, 92, 43, 32, 42}");
+            Console.WriteLine("Count:" + Find(input2));
+        }
+    }
+
+    public class ShuffleInteger : IMadLady
+    {
+        private void Shuffle(ref int[] input, int start, int end)
+        {
+            if((start > end) || (end == start + 1)) return;
+
+            // mid = 3
+            int mid = start + (end - start) / 2;
+
+            // 0 1 2 3 || 4 5 6 7
+            int leftStart = start + (mid - start) / 2 + 1;
+            int rightStart = mid + 1;
+            int temp;
+
+            while(leftStart <= mid)
+            {
+                temp = input[leftStart];
+                input[leftStart] = input[rightStart];
+                input[rightStart] = temp;
+
+                leftStart++;
+                rightStart++;
+            }
+            Shuffle(ref input, start, mid);
+            Shuffle(ref input, mid + 1, end);
+        }
+
+        static void Shuffle2(ref int[] a, int n)
+        {
+            // a1 a2 a3 a4 | b1 b2 b3 b4
+            // a => (2 * i) - 1
+            // b => (2 * i)
+
+            int temp;
+            n = n / 2;
+
+            for (int start = n + 1,
+                        j = n + 1,
+                        done = 0,
+                        i;
+                done < 2 * n - 2;
+                done++)
+                {
+                if (start == j) {
+                    start--;
+                    j--;
+                }
+
+                i = j > n ? j - n : j;
+                j = j > n ? 2 * i : 2 * i - 1;
+                temp = a[start];
+                a[start] = a[j];
+                a[j] = temp;
+            }
+        }
+
+        public void Run()
+        {
+            // Expected: 1, 11, 2, 12, 3, 13, 4, 14
+            int[] arr = new int[] {1, 2, 3, 4, 11, 12, 13, 14};
+            
+            // Quick sort - O(n logn)
+            Shuffle(ref arr, 0, arr.Length-1);
+            Console.WriteLine("   {1, 2, 3, 4, 11, 12, 13, 14}");
+            Console.WriteLine("=> {" + String.Join(", ", arr) + "}");
+
+            Shuffle2(ref arr, arr.Length-1);
+        }
+    }
+
+    class Decoding : IMadLady
+    {
+        private HashSet<string> Decode(string prefix, string code)
+        {
+            HashSet<string> set = new HashSet<string>();
+            HashSet<string> tempSet;
+            char c1, c2;
+
+            if(prefix == null || code == null) return set;
+            if(code.Length == 0)
+            {
+                set.Add(prefix);
+                return set;
+            }
+
+            c1 = (char) (Char.GetNumericValue(code[0]) - 1 + 'a');
+
+            if(code[0] != '0')
+            {
+                tempSet = Decode(prefix + c1.ToString(), code.Substring(1));
+                set.UnionWith(tempSet);
+            }
+
+            if(code.Length >= 2)
+            {
+                c2 = (char) (Char.GetNumericValue(code[1]) - 1 + 'a');
+
+                if(Char.GetNumericValue(code[0]) == 1)
+                {
+                    tempSet = Decode(prefix + Convert.ToString(c1) + c2.ToString(),
+                                    code.Substring(2));
+                    set.UnionWith(tempSet);
+
+                }
+
+                if(Char.GetNumericValue(code[0]) == 2 &&
+                    Char.GetNumericValue(code[1]) <= 6)
+                {
+                    tempSet = Decode(prefix + c1.ToString() + c2.ToString(),
+                                    code.Substring(2));
+                    set.UnionWith(tempSet);
+                }
+            }
+
+            return set;
+        }
+
+        public void Run()
+        {
+            string code = "1123";
+            HashSet<string> set = Decode("", code);
+
+            Console.WriteLine("Code:" + code);
+            foreach(string str in set)
+            {
+                Console.WriteLine(str);
+            }
+        }
+
+    }
     class Program
     {
         static void Main(string[] args)
@@ -851,7 +1152,13 @@ namespace MadLady
                 "ZeroEvenOdd",
                 "ZipLinkedList",
                 "LookSay",
-                "BinaryAdd"
+                "BinaryAdd",
+                "KSubArrarys",
+                "InlineSortArrarys",
+                "MaxSubArray",
+                "FindLongestConseqSubseq",
+                "ShuffleInteger",
+                "Decoding"
             };
 
             foreach(string name in names)
@@ -868,15 +1175,7 @@ namespace MadLady
                 {
                     Console.Write(e.ToString());
                 }
-
-
             }
-
         }
-    }
-
-    public interface IMadLady
-    {
-        void Run();
     }
 }
