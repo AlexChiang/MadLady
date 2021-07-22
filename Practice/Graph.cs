@@ -9,11 +9,16 @@ namespace MadLady
 {
     public class GraphNode
     {
-        
+
     }
 
-    public class Graph
+    public class Graph : IMadLady
     {
+
+        public void Run()
+        {
+
+        }
 
     }
 }

@@ -24,6 +24,19 @@ namespace MadLady
     {
         public Node root;
 
+        public int SumBetween(Node node, int low, int high)
+        {
+            if(node == null || node.value < low || node.value > high)
+            {
+                return 0;
+            }
+            
+            int leftSum = SumBetween(node.left, low, high);
+            int rightSum = SumBetween(node.right, low, high);
+            
+            return node.value + leftSum + rightSum;
+        }
+
         public void Run()
         {
             root = null;
@@ -36,6 +49,9 @@ namespace MadLady
 
             InOrder(root);
             Console.WriteLine();
+
+            int sum = SumBetween(root, 8, 20);
+            Console.WriteLine("Sum (8-20): " + sum);
 
             bool result = Delete(ref root, 16);
             Console.WriteLine("Delecting 16: " + result.ToString());

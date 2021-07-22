@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
+using MadLady;
 
 namespace MadLady
 {
@@ -1158,7 +1159,21 @@ namespace MadLady
                 "MaxSubArray",
                 "FindLongestConseqSubseq",
                 "ShuffleInteger",
-                "Decoding"
+                "Decoding",
+                // Tree
+                "BST",
+                "LowestCommonAncestor",
+                "FindNSmallest",
+                "HeightBST",
+                "KDistanceFromRoot",
+                // Trie
+                "Trie",
+                // Graph
+                "Graph",
+                // LinkedList
+                "MyLinkedList",
+                "StringArray"
+
             };
 
             foreach(string name in names)

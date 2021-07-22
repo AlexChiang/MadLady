@@ -34,6 +34,7 @@ public void Bar()
     dict.Remove(0);
     count = dict.Count;
     foreach(KeyValuePair<int, int> kvp in dict){};
+    //kvp.Key kvp.Value
     bool b1 = dict.ContainsKey(0);
     bool b2 = dict.TryGetValue(0, out int val);
 
